@@ -78,9 +78,9 @@ app.post("/api/users/:_id/exercises", (req, res) => {
 
   const { description, duration } = req.body;
 
-  var date = new Date(req.body.date).toString();
+  var date = new Date(req.body.date).toDateString();
   if (!date || date === "Invalid Date") {
-    date = new Date().toString();
+    date = new Date().toDateString();
   }
 
   if (!description || !duration) {
@@ -92,19 +92,19 @@ app.post("/api/users/:_id/exercises", (req, res) => {
           //doesnt exist
           res.status(500).json({ error: "user not found" });
         } else {
-          const newExercise = {
+          const exercise = {
             description: description,
             duration: duration,
             date: date,
           };
 
-          user.exercises.push(newExercise);
+          user.exercises.push(exercise);
           user
             .save()
             .then(() => {
               res.json({
                 username: user.username,
-                ...newExercise,
+                exercise,
                 _id: user._id,
               });
             })
@@ -129,7 +129,7 @@ app.get("/api/users/:_id/logs", (req, res) => {
       if (!user) {
         res.status(500).json({ error: "user not found" });
       } else {
-        const exercisesArray = user.exercises;
+        var exercisesArray = user.exercises;
 
         const fromDate = new Date(from);
         if (
