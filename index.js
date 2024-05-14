@@ -94,7 +94,7 @@ app.post("/api/users/:_id/exercises", (req, res) => {
         } else {
           const exercise = {
             description: description,
-            duration: duration,
+            duration: parseInt(duration),
             date: date,
           };
 
@@ -104,7 +104,7 @@ app.post("/api/users/:_id/exercises", (req, res) => {
             .then(() => {
               res.json({
                 username: user.username,
-                exercise,
+                ...exercise,
                 _id: user._id,
               });
             })
